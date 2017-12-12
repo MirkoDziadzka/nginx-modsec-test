@@ -8,3 +8,6 @@ build:
 
 run: build
 	docker run --rm -p 8080:80  nginx-modsec
+
+shell: build
+	docker run --rm -it nginx-modsec /bin/bash
