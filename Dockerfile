@@ -34,6 +34,7 @@ ADD modsecurity.conf /usr/local/nginx/conf/
 # configure modsec
 
 ADD owasp-modsecurity-crs/ /usr/local/nginx/conf/owasp-modsecurity-crs
+ADD additional-rules/ /usr/local/nginx/conf/additional-rules
 ADD crs-setup.conf /usr/local/nginx/conf/owasp-modsecurity-crs/
 WORKDIR /usr/local/nginx/conf/owasp-modsecurity-crs/rules
 RUN mv REQUEST-900-EXCLUSION-RULES-BEFORE-CRS.conf.example REQUEST-900-EXCLUSION-RULES-BEFORE-CRS.conf
