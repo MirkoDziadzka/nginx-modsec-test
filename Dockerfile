@@ -26,13 +26,12 @@ RUN make install
 RUN /usr/local/nginx/sbin/nginx -t
 
 # configure nginx
-# ADD nginx.service /lib/systemd/system/
-
-COPY nginx.conf  /usr/local/nginx/conf/nginx.conf
-ADD modsec_includes.conf /usr/local/nginx/conf/
-RUN cp /usr/src/ModSecurity/modsecurity.conf-recommended /usr/local/nginx/conf/modsecurity.conf
 RUN cp /usr/src/ModSecurity/unicode.mapping /usr/local/nginx/conf/
-RUN sed -i "s/SecRuleEngine DetectionOnly/SecRuleEngine On/" /usr/local/nginx/conf/modsecurity.conf
+ADD nginx.conf  /usr/local/nginx/conf/
+ADD modsec_includes.conf /usr/local/nginx/conf/
+ADD modsecurity.conf /usr/local/nginx/conf/
+
+# configure modsec
 
 ADD owasp-modsecurity-crs/ /usr/local/nginx/conf/owasp-modsecurity-crs
 ADD crs-setup.conf /usr/local/nginx/conf/owasp-modsecurity-crs/
@@ -40,11 +39,9 @@ WORKDIR /usr/local/nginx/conf/owasp-modsecurity-crs/rules
 RUN mv REQUEST-900-EXCLUSION-RULES-BEFORE-CRS.conf.example REQUEST-900-EXCLUSION-RULES-BEFORE-CRS.conf
 RUN mv RESPONSE-999-EXCLUSION-RULES-AFTER-CRS.conf.example RESPONSE-999-EXCLUSION-RULES-AFTER-CRS.conf
 
+# check the config
 RUN /usr/local/nginx/sbin/nginx -t -c /usr/local/nginx/conf/nginx.conf
+
+# start nginx when this contain is run
 CMD /usr/local/nginx/sbin/nginx -c /usr/local/nginx/conf/nginx.conf
-
-
-
-
-
 
