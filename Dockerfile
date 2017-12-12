@@ -1,10 +1,12 @@
 FROM centos:7
 EXPOSE 80
 
+# update and install OS packages
 RUN yum update -y
 RUN yum groupinstall -y "Development Tools"
 RUN yum install -y httpd httpd-devel pcre pcre-devel libxml2 libxml2-devel curl curl-devel openssl openssl-devel
 
+# checkout and compile ModSecurity for nginx
 WORKDIR /usr/src
 RUN git clone -b nginx_refactoring https://github.com/SpiderLabs/ModSecurity.git
 WORKDIR /usr/src/ModSecurity
@@ -12,11 +14,11 @@ RUN ./autogen.sh
 RUN ./configure --enable-standalone-module --disable-mlogc
 RUN make
 
+# compile and install nginx with ModSecurity
 WORKDIR /usr/src
 ADD nginx-1.10.3.tar.gz /usr/src/
 RUN groupadd -r nginx
 RUN useradd -r -g nginx -s /sbin/nologin -M nginx
-
 WORKDIR /usr/src/nginx-1.10.3
 RUN ./configure --user=nginx --group=nginx --add-module=/usr/src/ModSecurity/nginx/modsecurity --with-http_ssl_module
 RUN make
