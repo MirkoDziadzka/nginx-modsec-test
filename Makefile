@@ -3,6 +3,7 @@ all:
 	$(MAKE) run
 
 build:
+	git submodule update
 	docker build . --tag nginx-modsec
 
 run: build

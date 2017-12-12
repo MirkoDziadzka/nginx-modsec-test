@@ -35,8 +35,7 @@ RUN cp /usr/src/ModSecurity/unicode.mapping /usr/local/nginx/conf/
 RUN sed -i "s/SecRuleEngine DetectionOnly/SecRuleEngine On/" /usr/local/nginx/conf/modsecurity.conf
 
 ADD owasp-modsecurity-crs/ /usr/local/nginx/conf/owasp-modsecurity-crs
-WORKDIR /usr/local/nginx/conf/owasp-modsecurity-crs
-RUN mv crs-setup.conf.example crs-setup.conf
+ADD crs-setup.conf /usr/local/nginx/conf/owasp-modsecurity-crs/
 WORKDIR /usr/local/nginx/conf/owasp-modsecurity-crs/rules
 RUN mv REQUEST-900-EXCLUSION-RULES-BEFORE-CRS.conf.example REQUEST-900-EXCLUSION-RULES-BEFORE-CRS.conf
 RUN mv RESPONSE-999-EXCLUSION-RULES-AFTER-CRS.conf.example RESPONSE-999-EXCLUSION-RULES-AFTER-CRS.conf
