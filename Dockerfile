@@ -4,7 +4,8 @@ EXPOSE 80
 # update and install OS packages
 RUN yum update -y
 RUN yum groupinstall -y "Development Tools"
-RUN yum install -y httpd httpd-devel pcre pcre-devel libxml2 libxml2-devel curl curl-devel openssl openssl-devel GeoIP-devel
+RUN yum install -y httpd httpd-devel pcre pcre-devel libxml2 libxml2-devel curl curl-devel openssl openssl-devel 
+RUN yum install -y GeoIP-devel yajl-devel
 
 # Make debugging easier ...
 WORKDIR /usr/src
@@ -48,6 +49,10 @@ ADD crs-setup.conf /usr/local/nginx/conf/owasp-modsecurity-crs/
 # check the config
 # RUN /usr/local/nginx/sbin/nginx -V
 # RUN /usr/local/nginx/sbin/nginx -T
+
+WORKDIR /usr/src/ModSecurity/test
+RUN ./unit_tests
+RUN env TERM=vt100 ./regression_tests 
 
 # start nginx when this contain is run
 CMD /usr/local/nginx/sbin/nginx -c /usr/local/nginx/conf/nginx.conf
