@@ -23,10 +23,14 @@ RUN make
 RUN make install
 
 
+# checkout modsecurity crs
+WORKDIR /usr/src
+RUN git clone -b v3.0/master https://github.com/SpiderLabs/owasp-modsecurity-crs.git
+
+
 # checkout modsec-connector
 WORKDIR /usr/src
 RUN git clone https://github.com/SpiderLabs/ModSecurity-nginx.git
-
 WORKDIR /usr/src
 ADD nginx-1.12.2.tar.gz /usr/src/
 RUN groupadd -r nginx
@@ -39,10 +43,11 @@ RUN /usr/local/nginx/sbin/nginx -V
 RUN /usr/local/nginx/sbin/nginx -t
 
 
+
 # configure nginx
 ADD modsecurity.conf /usr/local/nginx/conf/
 ADD nginx.conf  /usr/local/nginx/conf/
-ADD owasp-modsecurity-crs/ /usr/local/nginx/conf/owasp-modsecurity-crs
+RUN ln -sf /usr/src/owasp-modsecurity-crs /usr/local/nginx/conf/owasp-modsecurity-crs
 ADD additional-rules/ /usr/local/nginx/conf/additional-rules
 ADD crs-setup.conf /usr/local/nginx/conf/owasp-modsecurity-crs/
 
