@@ -1,3 +1,0 @@
-[submodule "owasp-modsecurity-crs"]
-	path = owasp-modsecurity-crs
-	url = https://github.com/SpiderLabs/owasp-modsecurity-crs
